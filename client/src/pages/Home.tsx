@@ -3,20 +3,20 @@ import { useLocation } from "wouter";
 import SearchBar from "@/components/SearchBar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Film } from "lucide-react";
-import { getTeluguMovies } from "@/lib/movies";
+import { getPopularMovies } from "@/lib/movies";
 import MovieCard from "@/components/MovieCard";
 import type { Movie } from "@shared/schema";
 import { getFavorites } from "@/lib/favorites";
 
 export default function Home() {
   const [, setLocation] = useLocation();
-  const [teluguMovies, setTeluguMovies] = useState<Movie[]>([]);
+  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
-    const loadTeluguMovies = async () => {
-      const movies = await getTeluguMovies();
-      setTeluguMovies(movies);
+    const loadPopularMovies = async () => {
+      const movies = await getPopularMovies();
+      setPopularMovies(movies);
     };
 
     const loadFavorites = () => {
@@ -24,7 +24,7 @@ export default function Home() {
       setFavorites(favMovies.map(m => m.imdbID));
     };
 
-    loadTeluguMovies();
+    loadPopularMovies();
     loadFavorites();
   }, []);
 
@@ -40,7 +40,7 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <Card className="mb-8">
         <CardContent className="p-6 text-center">
           <div className="flex justify-center mb-4">
@@ -48,17 +48,17 @@ export default function Home() {
           </div>
           <h1 className="text-3xl font-bold mb-2">Welcome to IMDB Clone</h1>
           <p className="text-muted-foreground mb-6">
-            Search for movies and add them to your favorites
+            Search through millions of movies or explore our curated collection
           </p>
           <SearchBar onSelect={(id) => setLocation(`/movie/${id}`)} />
         </CardContent>
       </Card>
 
-      {teluguMovies.length > 0 && (
+      {popularMovies.length > 0 && (
         <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-6">Popular Telugu Movies</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {teluguMovies.map((movie) => (
+          <h2 className="text-2xl font-bold mb-6">Popular Movies</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {popularMovies.map((movie) => (
               <MovieCard
                 key={movie.imdbID}
                 movie={movie}
